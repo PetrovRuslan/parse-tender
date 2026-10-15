@@ -1,0 +1,39 @@
+services:
+  parser:
+    build: .
+    image: parser-tender:max
+    restart: unless-stopped
+    init: true
+    environment:
+      TZ: Europe/Moscow
+      TELEGRAM_ENABLED: "false"
+      TELEGRAM_TOKEN_FILE: /run/secrets/telegram_token
+      MAX_ENABLED: "true"
+      MAX_CHAT_IDS: "-80127052806379"
+      MAX_TOKEN_FILE: /run/secrets/max_token
+      MAX_CA_BUNDLE: /app/certs/max-ca.pem
+      HTTP_PROXY: ""
+      HTTPS_PROXY: ""
+      ALL_PROXY: ""
+      NO_PROXY: "*"
+    volumes:
+      - ./data:/data
+      - ./config.runtime.py:/app/config.py:ro
+      - ./secrets/max_token:/run/secrets/max_token:ro
+      - ./secrets/telegram_token:/run/secrets/telegram_token:ro
+      - ./certs/max-ca.pem:/app/certs/max-ca.pem:ro
+    shm_size: 128mb
+    mem_limit: 600m
+    memswap_limit: 900m
+    cpus: 0.75
+    labels:
+      com.centurylinklabs.watchtower.enable: "false"
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

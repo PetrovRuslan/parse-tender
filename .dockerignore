@@ -1,0 +1,9 @@
+*
+!Dockerfile
+!requirements.txt
+!main.py
+!parser.py
+!database.py
+!utils.py
+
+!max_notify.py
